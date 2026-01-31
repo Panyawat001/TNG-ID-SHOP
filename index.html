@@ -3,124 +3,675 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#070b14" />
   <title>TNG-ID-SHOP</title>
+
   <style>
     :root{
-      --bg:#0b1220; --card:#121b2f; --muted:#9fb0d0; --text:#e9f0ff; --accent:#4da3ff;
-      --ok:#36d399; --warn:#fbbf24; --sold:#ff6b6b; --border:rgba(255,255,255,.10);
+      --bg0:#050811;
+      --bg1:#070b14;
+      --bg2:#0b1220;
+      --card: rgba(18,27,47,.78);
+      --card2: rgba(13,20,38,.72);
+      --muted:#a9b7d6;
+      --text:#eef4ff;
+
+      --accent:#63b3ff;
+      --accent2:#8a5bff;
+      --accent3:#27f2d5;
+
+      --ok:#36d399;
+      --warn:#fbbf24;
+      --sold:#ff6b6b;
+
+      --border:rgba(255,255,255,.11);
+      --border2:rgba(99,179,255,.22);
+
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 22px;
+
+      --mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      --sans: system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans Thai",sans-serif;
     }
-    *{box-sizing:border-box}
+
+    *{ box-sizing:border-box }
+    html{ scroll-behavior:smooth }
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans Thai",sans-serif;
-      background:linear-gradient(180deg,#070b14,#0b1220);
+      font-family:var(--sans);
       color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(138,91,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 85% 15%, rgba(99,179,255,.14), transparent 55%),
+        radial-gradient(900px 600px at 50% 85%, rgba(39,242,213,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg2));
+      overflow-x:hidden;
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px}
-    .top{display:flex;gap:14px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
-    .brand h1{margin:0;font-size:30px;letter-spacing:.2px}
-    .brand p{margin:6px 0 0;color:var(--muted);font-size:13px}
-    .panel{background:rgba(18,27,47,.9);border:1px solid var(--border);border-radius:18px;padding:14px}
-    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+    /* ===== Ambient animated grid ===== */
+    .bg-grid{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.55;
+      mix-blend-mode:screen;
+      background:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(closest-side at 50% 30%, rgba(0,0,0,.95), transparent 70%);
+      animation: drift 10s linear infinite;
+      transform: translateZ(0);
+    }
+    @keyframes drift{
+      0%{ background-position: 0 0, 0 0; }
+      100%{ background-position: 120px 90px, 120px 90px; }
+    }
+
+    .wrap{ max-width:1180px; margin:0 auto; padding:26px 16px 34px; position:relative; z-index:2; }
+
+    /* ===== Top Bar ===== */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+      padding:12px 14px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      background: rgba(12,16,28,.55);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    .brand-mini{ display:flex; align-items:center; gap:10px; }
+    .logo{
+      width:38px;height:38px;border-radius:12px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.30), transparent 60%),
+        linear-gradient(135deg, rgba(99,179,255,.95), rgba(138,91,255,.95));
+      box-shadow: 0 10px 25px rgba(99,179,255,.18), 0 10px 25px rgba(138,91,255,.16);
+      position:relative; overflow:hidden;
+    }
+    .logo:after{
+      content:""; position:absolute; inset:-40%;
+      background: conic-gradient(from 180deg, transparent 0 60deg, rgba(255,255,255,.22) 70deg, transparent 140deg);
+      animation: spin 2.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .brand-mini b{ font-weight:900; letter-spacing:.2px; }
+    .brand-mini span{ color: var(--muted); font-size:12px; }
+
+    /* ===== Hero ===== */
+    .hero{
+      margin-top:14px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        radial-gradient(900px 420px at 20% 20%, rgba(99,179,255,.20), transparent 55%),
+        radial-gradient(800px 380px at 80% 20%, rgba(138,91,255,.18), transparent 60%),
+        radial-gradient(900px 480px at 50% 90%, rgba(39,242,213,.10), transparent 60%),
+        linear-gradient(180deg, rgba(18,27,47,.86), rgba(9,12,20,.62));
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      padding:22px 18px 18px;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      transform: translateX(-60%);
+      animation: sweep 6s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes sweep{
+      0%{ transform: translateX(-70%); opacity:.0 }
+      20%{ opacity:.45 }
+      50%{ opacity:.12 }
+      100%{ transform: translateX(70%); opacity:.0 }
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width:880px){
+      .hero-grid{ grid-template-columns:1fr; }
+    }
+
+    .hero h1{
+      margin:0;
+      font-size:34px;
+      font-weight:950;
+      letter-spacing:.2px;
+      line-height:1.05;
+    }
+    .glow{
+      background: linear-gradient(90deg, #fff, #cfe6ff, #fff);
+      -webkit-background-clip:text; background-clip:text;
+      color:transparent;
+      text-shadow: 0 0 18px rgba(99,179,255,.15);
+      position:relative;
+    }
+    .glitch{
+      position:relative; display:inline-block;
+    }
+    .glitch:before,.glitch:after{
+      content:attr(data-text);
+      position:absolute; inset:0;
+      opacity:.42;
+      filter: blur(.2px);
+      clip-path: inset(0 0 0 0);
+      pointer-events:none;
+    }
+    .glitch:before{
+      transform: translate(1px,-1px);
+      color: rgba(99,179,255,.75);
+      animation: glitch1 3.2s infinite linear;
+    }
+    .glitch:after{
+      transform: translate(-1px,1px);
+      color: rgba(138,91,255,.7);
+      animation: glitch2 2.7s infinite linear;
+    }
+    @keyframes glitch1{
+      0%,100%{ clip-path: inset(0 0 0 0); }
+      20%{ clip-path: inset(10% 0 65% 0); }
+      40%{ clip-path: inset(55% 0 25% 0); }
+      60%{ clip-path: inset(30% 0 45% 0); }
+      80%{ clip-path: inset(70% 0 10% 0); }
+    }
+    @keyframes glitch2{
+      0%,100%{ clip-path: inset(0 0 0 0); }
+      25%{ clip-path: inset(60% 0 20% 0); }
+      50%{ clip-path: inset(15% 0 55% 0); }
+      75%{ clip-path: inset(40% 0 35% 0); }
+    }
+
+    .hero p{
+      margin:10px 0 0;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.55;
+      max-width: 58ch;
+    }
+
+    .hero-actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+      align-items:center;
+    }
+
+    /* ===== Controls Panel ===== */
+    .panel{
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.09);
+      background: rgba(10,14,26,.58);
+      backdrop-filter: blur(12px);
+      padding:14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.22);
+    }
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
     .input{
-      flex:1;min-width:240px;
-      background:rgba(255,255,255,.04);
-      border:1px solid var(--border);
-      color:var(--text);
-      border-radius:14px;
-      padding:10px 12px;
+      flex:1; min-width:220px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      border-radius: 14px;
+      padding:11px 12px;
       outline:none;
+      transition: .2s ease;
     }
+    .input:focus{
+      border-color: rgba(99,179,255,.55);
+      box-shadow: 0 0 0 4px rgba(99,179,255,.12);
+    }
+
+    /* ===== Buttons ===== */
     .btn{
       cursor:pointer;
-      display:inline-flex;gap:8px;align-items:center;
-      padding:10px 12px;border-radius:14px;
-      border:1px solid var(--border);
+      border-radius: 14px;
+      padding:11px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
       color:var(--text);
       text-decoration:none;
-      background:rgba(255,255,255,.04);
+      display:inline-flex; gap:8px; align-items:center;
       white-space:nowrap;
+      transition: transform .12s ease, border-color .2s ease, box-shadow .2s ease;
+      user-select:none;
     }
-    .btn:hover{border-color:rgba(77,163,255,.55)}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
-    @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:620px){.grid{grid-template-columns:1fr}}
-    .card{background:rgba(18,27,47,.9);border:1px solid var(--border);border-radius:18px;overflow:hidden}
-    .thumb{aspect-ratio:16/9;background:#0e1730;display:block;width:100%;object-fit:cover}
-    .pad{padding:12px 12px 14px}
-    .title{font-weight:900;font-size:16px;margin:0}
-    .sub{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.5}
-    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
-    .price{font-weight:950;font-size:20px}
-    .badge{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
-    .status{font-weight:900}
-    .status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.sold{color:var(--sold)}
-    details{margin-top:10px}
-    summary{cursor:pointer;color:var(--accent);font-weight:800}
-    .detail-wrap{margin-top:10px}
-    .detail-pre{
-      margin:0;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.03);
-      color:#d7e5ff;
-      white-space:pre-wrap;
-      line-height:1.55;
+    .btn:hover{
+      border-color: rgba(99,179,255,.55);
+      box-shadow: 0 12px 30px rgba(0,0,0,.20);
+      transform: translateY(-1px);
+    }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btn.primary{
+      border-color: rgba(99,179,255,.35);
+      background: linear-gradient(135deg, rgba(99,179,255,.22), rgba(138,91,255,.18));
+      box-shadow: 0 16px 40px rgba(99,179,255,.09);
+    }
+    .btn.ghost{
+      background: transparent;
+      border-color: rgba(255,255,255,.10);
+    }
+    .btn.small{ padding:9px 11px; border-radius: 13px; font-size:13px; }
+
+    /* ===== Sorting pills ===== */
+    .pills{ display:flex; gap:8px; flex-wrap:wrap; }
+    .pill{
+      padding:9px 11px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition:.18s ease;
+      font-size:13px;
+    }
+    .pill:hover{ border-color: rgba(99,179,255,.35); color:#dff0ff; }
+    .pill.active{
+      border-color: rgba(99,179,255,.55);
+      background: rgba(99,179,255,.10);
+      color:#eaf4ff;
+    }
+
+    /* ===== Cards grid ===== */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width:980px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:620px){ .grid{ grid-template-columns:1fr; } }
+
+    .card{
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+      transform-style: preserve-3d;
+      position:relative;
+      transition: transform .18s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .card:before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(600px 280px at var(--mx,50%) var(--my,30%), rgba(99,179,255,.22), transparent 55%);
+      opacity:.0;
+      transition: opacity .2s ease;
+      pointer-events:none;
+    }
+    .card:hover{
+      border-color: rgba(99,179,255,.28);
+      box-shadow: 0 22px 70px rgba(0,0,0,.48);
+      transform: translateY(-4px);
+    }
+    .card:hover:before{ opacity:1; }
+
+    .thumb{
+      display:block;
+      width:100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: rgba(0,0,0,.22);
+      filter: saturate(1.08) contrast(1.06);
+      transform: translateZ(20px);
+    }
+
+    .pad{ padding:12px 12px 14px; }
+    .title{ margin:0; font-weight:950; font-size:16px; letter-spacing:.15px; }
+    .sub{ margin-top:5px; color:var(--muted); font-size:12px; line-height:1.5; }
+    .row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+
+    .price{
+      font-weight:950;
+      font-size:20px;
+      letter-spacing:.2px;
+    }
+    .status{
+      font-weight:950;
+      display:inline-flex; gap:8px; align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
       font-size:12px;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      color: var(--muted);
     }
-    footer{margin-top:18px;color:var(--muted);font-size:12px}
+    .dot{ width:8px;height:8px;border-radius:50%; background:#999; box-shadow:0 0 14px rgba(255,255,255,.08); }
+    .status.ok .dot{ background: var(--ok); box-shadow:0 0 16px rgba(54,211,153,.25); }
+    .status.warn .dot{ background: var(--warn); box-shadow:0 0 16px rgba(251,191,36,.22); }
+    .status.sold .dot{ background: var(--sold); box-shadow:0 0 16px rgba(255,107,107,.22); }
+
+    .badge{
+      font-size:12px;
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      color: #cfe2ff;
+      background: rgba(255,255,255,.03);
+    }
+
+    .mini{
+      color: var(--muted);
+      font-size:12px;
+      margin-top:10px;
+    }
+
+    .card-actions{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    /* ===== Modal ===== */
+    .backdrop{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index: 50;
+    }
+    .backdrop.show{ display:flex; }
+    .modal{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(900px 460px at 20% 20%, rgba(99,179,255,.18), transparent 60%),
+        radial-gradient(900px 460px at 80% 20%, rgba(138,91,255,.16), transparent 60%),
+        linear-gradient(180deg, rgba(18,27,47,.92), rgba(9,12,20,.78));
+      box-shadow: 0 30px 120px rgba(0,0,0,.60);
+      overflow:hidden;
+      transform: translateY(10px) scale(.98);
+      opacity:0;
+      transition: .18s ease;
+    }
+    .backdrop.show .modal{
+      transform: translateY(0) scale(1);
+      opacity:1;
+    }
+    .modal-top{
+      display:flex; justify-content:space-between; align-items:flex-start;
+      gap:12px;
+      padding:14px 14px 8px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .modal-title{
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .modal-title b{ font-size:18px; font-weight:950; }
+    .modal-title span{ color:var(--muted); font-size:12px; }
+    .x{
+      width:40px;height:40px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      display:grid; place-items:center;
+      transition:.12s ease;
+    }
+    .x:hover{ border-color: rgba(99,179,255,.45); transform: translateY(-1px); }
+    .modal-body{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      padding:14px;
+    }
+    @media (max-width:860px){
+      .modal-body{ grid-template-columns:1fr; }
+    }
+    .modal-img{
+      border-radius: 18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      position:relative;
+    }
+    .modal-img img{ width:100%; display:block; object-fit:cover; aspect-ratio: 16/10; }
+    .modal-img .zoom{
+      position:absolute; right:10px; bottom:10px;
+      padding:9px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.40);
+      backdrop-filter: blur(10px);
+      cursor:pointer;
+    }
+    .modal-info{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      padding:12px;
+    }
+    .modal-info .topline{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+    .modal-info .price{ font-size:22px; }
+    .modal-info .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .pre{
+      margin-top:10px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding:12px;
+      color:#dbe8ff;
+      font-family: var(--mono);
+      font-size:12px;
+      white-space:pre-wrap;
+      line-height:1.6;
+      max-height: 360px;
+      overflow:auto;
+    }
+    .pre::-webkit-scrollbar{ height:10px; width:10px }
+    .pre::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.14); border-radius: 999px }
+    .pre::-webkit-scrollbar-track{ background: rgba(0,0,0,.18); border-radius: 999px }
+
+    /* ===== Lightbox ===== */
+    .lightbox{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.82);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:60;
+    }
+    .lightbox.show{ display:flex; }
+    .lightbox img{
+      width:min(1200px, 100%);
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 30px 120px rgba(0,0,0,.7);
+    }
+
+    /* ===== Toast ===== */
     .toast{
-      position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
-      background:rgba(0,0,0,.65);
-      border:1px solid rgba(255,255,255,.18);
-      padding:10px 12px;border-radius:14px;color:#fff;display:none
+      position:fixed; left:50%; bottom:22px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.60);
+      border: 1px solid rgba(255,255,255,.18);
+      padding:10px 12px;
+      border-radius: 14px;
+      color:#fff;
+      display:none;
+      z-index:70;
+      backdrop-filter: blur(10px);
+    }
+
+    /* ===== Scroll progress + Back to top ===== */
+    .progress{
+      position:fixed; left:0; top:0; height:3px;
+      width:0%;
+      background: linear-gradient(90deg, rgba(99,179,255,.95), rgba(138,91,255,.95), rgba(39,242,213,.95));
+      box-shadow: 0 0 18px rgba(99,179,255,.22);
+      z-index:80;
+    }
+    .toTop{
+      position:fixed; right:16px; bottom:16px;
+      width:46px; height:46px; border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(12,16,28,.62);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      display:grid; place-items:center;
+      cursor:pointer;
+      opacity:0; transform: translateY(10px);
+      transition:.18s ease;
+      z-index:75;
+    }
+    .toTop.show{ opacity:1; transform: translateY(0); }
+    .toTop:hover{ border-color: rgba(99,179,255,.55); transform: translateY(-1px); }
+
+    /* ===== Reveal animation ===== */
+    .reveal{ opacity:0; transform: translateY(10px); transition: .35s ease; }
+    .reveal.in{ opacity:1; transform: translateY(0); }
+
+    footer{
+      margin-top:18px;
+      color: var(--muted);
+      font-size:12px;
     }
   </style>
 </head>
+
 <body>
+  <div class="bg-grid"></div>
+  <div class="progress" id="progress"></div>
+
   <div class="wrap" id="top">
-    <div class="top">
-      <div class="brand">
-        <h1>🎮 TNG-ID-SHOP</h1>
-        <p>เว็บขายไอดีเกม • มีรูปประกอบ • ค้นหาได้ • กดคัดลอกช่องทางติดต่อได้ทันที</p>
+    <div class="topbar reveal">
+      <div class="brand-mini">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div><b>TNG-ID-SHOP</b></div>
+          <div><span>GitHub Pages • ร้านขายไอดีเกม</span></div>
+        </div>
       </div>
-      <div class="controls">
-        <a class="btn" href="#list">ดูรายการ</a>
-        <button class="btn" id="copyLine">คัดลอก Line</button>
-        <a class="btn" id="discordBtn" href="#" target="_blank" rel="noreferrer">Discord</a>
-      </div>
-    </div>
-
-    <div class="panel" style="margin-top:14px">
-      <div class="controls">
-        <input class="input" id="q" placeholder="ค้นหา เช่น แมวคราม / บู้ตึง / มือพุธ / เส้าหลิน / ราคา..." />
-        <select class="input" id="fStatus" style="flex:0;min-width:160px">
-          <option value="">ทุกสถานะ</option>
-          <option value="ว่าง">ว่าง</option>
-          <option value="จอง">จอง</option>
-          <option value="ขายแล้ว">ขายแล้ว</option>
-        </select>
-      </div>
-      <div class="sub" style="margin-top:8px">
-        ⚠️ แนะนำ: นัดกลาง/มีหลักฐาน, ไม่โพสต์รหัสลงเว็บ, ตรวจสอบกฎเกมก่อนซื้อขาย
+      <div class="controls" style="margin-left:auto">
+        <a class="btn ghost small" href="#list">ดูรายการ</a>
+        <button class="btn small" id="copyLine">คัดลอก Line</button>
+        <a class="btn small" id="discordBtn" href="#" target="_blank" rel="noreferrer">Discord</a>
       </div>
     </div>
 
-    <div id="list" class="grid"></div>
+    <section class="hero reveal" style="margin-top:14px">
+      <div class="hero-grid">
+        <div>
+          <h1 class="glow">
+            <span class="glitch" data-text="TNG-ID-SHOP">TNG-ID-SHOP</span>
+          </h1>
+          <p>
+            เว็บขายไอดีเกมสไตล์นีออน • ค้นหา/กรอง/เรียงราคา • คลิกดูรายละเอียดแบบเต็ม •
+            มีปุ่มคัดลอกข้อความทักเพื่อส่งแชทได้ไว
+          </p>
 
-    <footer>© 2026 TNG-ID-SHOP • Hosted on GitHub Pages</footer>
+          <div class="hero-actions">
+            <a class="btn primary" href="#list">🚀 ดูไอดีทั้งหมด</a>
+            <button class="btn" id="copyMsgTop">📋 คัดลอกข้อความทัก (รวม)</button>
+            <button class="btn ghost" id="toggleMotion">✨ ปิด/เปิดเอฟเฟกต์</button>
+          </div>
+
+          <div class="mini" id="statsLine"></div>
+        </div>
+
+        <div class="panel">
+          <div class="controls">
+            <input class="input" id="q" placeholder="ค้นหา เช่น แมวคราม / บู้ตึง / มือพุธ / เส้าหลิน / ราคา..." />
+            <select class="input" id="fStatus" style="flex:0;min-width:160px">
+              <option value="">ทุกสถานะ</option>
+              <option value="ว่าง">ว่าง</option>
+              <option value="จอง">จอง</option>
+              <option value="ขายแล้ว">ขายแล้ว</option>
+            </select>
+          </div>
+
+          <div class="row" style="justify-content:space-between; margin-top:12px">
+            <div class="pills" id="sortPills">
+              <div class="pill active" data-sort="default">เรียง: แนะนำ</div>
+              <div class="pill" data-sort="low">ถูก → แพง</div>
+              <div class="pill" data-sort="high">แพง → ถูก</div>
+            </div>
+          </div>
+
+          <div class="mini" style="margin-top:10px">
+            ⚠️ แนะนำ: นัดกลาง/มีหลักฐาน, ไม่โพสต์รหัสลงเว็บ, ตรวจสอบกฎเกมก่อนซื้อขาย
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="list" class="grid" style="scroll-margin-top:18px"></div>
+
+    <footer class="reveal">© 2026 TNG-ID-SHOP • Hosted on GitHub Pages</footer>
   </div>
 
+  <!-- Modal -->
+  <div class="backdrop" id="backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <div class="modal-top">
+        <div class="modal-title">
+          <b id="mTitle">รายละเอียด</b>
+          <span id="mSub">—</span>
+        </div>
+        <button class="x" id="mClose" aria-label="ปิด">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-img">
+          <img id="mImg" src="" alt="">
+          <button class="zoom" id="mZoom">🔍 ดูรูปใหญ่</button>
+        </div>
+
+        <div class="modal-info">
+          <div class="topline">
+            <div class="price" id="mPrice">—</div>
+            <div class="status ok" id="mStatus"><span class="dot"></span><span>ว่าง</span></div>
+          </div>
+
+          <div class="tags" id="mTags"></div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn primary" id="mCopy">📋 คัดลอกข้อความทัก</button>
+            <a class="btn" id="mLine" href="#" target="_blank" rel="noreferrer">💬 ทัก Line</a>
+          </div>
+
+          <div class="pre" id="mDetail"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <!-- Toast -->
   <div class="toast" id="toast">คัดลอกแล้ว</div>
 
+  <!-- Back to top -->
+  <button class="toTop" id="toTop" title="กลับขึ้นบน">↑</button>
+
   <script>
-    // === ใส่ของคุณตรงนี้ ===
-    const LINE_ID = "ใส่ไอดีไลน์ของคุณ";        // เช่น "tree.support" หรือ "095xxxxxxx"
+    // ===============================
+    //  ตั้งค่าของคุณ
+    // ===============================
+    const LINE_ID = "ใส่ไอดีไลน์ของคุณ";        // เช่น "tree.support"
     const DISCORD_LINK = "https://discord.com/"; // ใส่ลิงก์โปรไฟล์/เซิร์ฟเวอร์
 
-    // === รายละเอียดเต็ม (ยาว) — มาจากไฟล์ที่คุณส่ง ===
+    // ===============================
+    //  รายละเอียดเต็ม (ของเดิม)
+    // ===============================
     const DETAIL_A = `SELL ID  
 
 ราคา : 160k
@@ -397,7 +948,9 @@
 ดาบเก่า
 สมบัติขวากำลังอัปให้ตัน`;
 
-    // === รายการไอดี ===
+    // ===============================
+    //  รายการสินค้า
+    // ===============================
     const items = [
       {
         id:"A",
@@ -434,30 +987,38 @@
       }
     ];
 
+    // ===============================
+    //  DOM
+    // ===============================
     const elList = document.getElementById("list");
     const elQ = document.getElementById("q");
     const elF = document.getElementById("fStatus");
     const toast = document.getElementById("toast");
+    const statsLine = document.getElementById("statsLine");
+    const progress = document.getElementById("progress");
+    const toTop = document.getElementById("toTop");
+
+    const backdrop = document.getElementById("backdrop");
+    const mClose = document.getElementById("mClose");
+    const mTitle = document.getElementById("mTitle");
+    const mSub = document.getElementById("mSub");
+    const mImg = document.getElementById("mImg");
+    const mPrice = document.getElementById("mPrice");
+    const mStatus = document.getElementById("mStatus");
+    const mTags = document.getElementById("mTags");
+    const mDetail = document.getElementById("mDetail");
+    const mCopy = document.getElementById("mCopy");
+    const mLine = document.getElementById("mLine");
+    const mZoom = document.getElementById("mZoom");
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
 
     document.getElementById("discordBtn").href = DISCORD_LINK;
 
-    document.getElementById("copyLine").addEventListener("click", async () => {
-      try{
-        await navigator.clipboard.writeText(LINE_ID);
-        showToast("คัดลอก Line แล้ว");
-      }catch(e){
-        prompt("คัดลอกไม่ได้ ให้คัดลอกเอง:", LINE_ID);
-      }
-    });
-
-    function showToast(msg){
-      toast.textContent = msg;
-      toast.style.display = "block";
-      setTimeout(()=>toast.style.display="none", 1400);
-    }
-
-    function badge(text){ return `<span class="badge">${escapeHtml(text)}</span>`; }
-
+    // ===============================
+    //  Helpers
+    // ===============================
     function escapeHtml(s){
       return String(s)
         .replaceAll("&","&amp;")
@@ -467,25 +1028,96 @@
         .replaceAll("'","&#039;");
     }
 
-    function render(){
-      const q = (elQ.value || "").trim().toLowerCase();
-      const f = elF.value;
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.style.display = "block";
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=>toast.style.display="none", 1400);
+    }
 
-      const filtered = items.filter(it=>{
-        const hay = `${it.title} ${it.sect} ${it.style} ${it.price} ${it.status} ${(it.highlights||[]).join(" ")}`
-          .toLowerCase();
-        const okQ = !q || hay.includes(q);
-        const okF = !f || it.status === f;
-        return okQ && okF;
-      });
+    async function copyText(txt){
+      try{
+        await navigator.clipboard.writeText(txt);
+        showToast("คัดลอกแล้ว ✅");
+      }catch(e){
+        prompt("คัดลอกไม่ได้ ให้คัดลอกเอง:", txt);
+      }
+    }
 
-      elList.innerHTML = filtered.map(it=>{
-        const statusClass = it.status==='ว่าง' ? 'ok' : (it.status==='จอง' ? 'warn' : 'sold');
-        const msg = `สนใจไอดี ${it.title} (${it.sect}) ราคา ${it.price} | สถานะ: ${it.status}\nติดต่อ: Line ${LINE_ID} / Discord ${DISCORD_LINK}`;
-        const lineLink = `https://line.me/ti/p/~${encodeURIComponent(LINE_ID)}`;
+    function parsePriceToNumber(priceStr){
+      // "฿160,000" -> 160000 , "฿50,000" -> 50000 , else NaN
+      const n = Number(String(priceStr).replace(/[^\d.]/g,""));
+      return Number.isFinite(n) ? n : NaN;
+    }
 
-        return `
-        <article class="card">
+    function statusClass(s){
+      if(s==="ว่าง") return "ok";
+      if(s==="จอง") return "warn";
+      return "sold";
+    }
+
+    function lineLink(){
+      return `https://line.me/ti/p/~${encodeURIComponent(LINE_ID)}`;
+    }
+
+    // ===============================
+    //  Motion toggle
+    // ===============================
+    let motionOn = true;
+    const toggleMotionBtn = document.getElementById("toggleMotion");
+    toggleMotionBtn.addEventListener("click", ()=>{
+      motionOn = !motionOn;
+      document.body.classList.toggle("no-motion", !motionOn);
+      showToast(motionOn ? "เปิดเอฟเฟกต์ ✨" : "ปิดเอฟเฟกต์ 💤");
+    });
+
+    // If user prefers reduced motion
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+      motionOn = false;
+      document.body.classList.add("no-motion");
+    }
+
+    // Disable heavy animations if motion off
+    const styleMotion = document.createElement("style");
+    styleMotion.textContent = `
+      .no-motion * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .no-motion .bg-grid { display:none !important; }
+    `;
+    document.head.appendChild(styleMotion);
+
+    // ===============================
+    //  Hero actions
+    // ===============================
+    document.getElementById("copyLine").addEventListener("click", ()=> copyText(LINE_ID));
+    document.getElementById("copyMsgTop").addEventListener("click", ()=>{
+      const msg = `สนใจไอดีในร้าน TNG-ID-SHOP\nติดต่อ: Line ${LINE_ID} / Discord ${DISCORD_LINK}`;
+      copyText(msg);
+    });
+
+    // ===============================
+    //  Sorting
+    // ===============================
+    let sortMode = "default";
+    const sortPills = document.getElementById("sortPills");
+    sortPills.addEventListener("click", (e)=>{
+      const pill = e.target.closest(".pill");
+      if(!pill) return;
+      sortMode = pill.dataset.sort || "default";
+      [...sortPills.querySelectorAll(".pill")].forEach(p=>p.classList.toggle("active", p===pill));
+      render();
+    });
+
+    // ===============================
+    //  Render
+    // ===============================
+    function buildCard(it){
+      const cls = statusClass(it.status);
+      const msg = `สนใจไอดี ${it.title} (${it.sect}) ราคา ${it.price} | สถานะ: ${it.status}\nติดต่อ: Line ${LINE_ID} / Discord ${DISCORD_LINK}`;
+
+      const tags = (it.highlights||[]).slice(0,6).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join("");
+
+      return `
+        <article class="card reveal" data-id="${escapeHtml(it.id)}" tabindex="0" role="button" aria-label="เปิดรายละเอียด ${escapeHtml(it.title)}">
           <img class="thumb" src="${escapeHtml(it.img)}" alt="${escapeHtml(it.title)}">
           <div class="pad">
             <p class="title">${escapeHtml(it.title)}</p>
@@ -493,41 +1125,233 @@
 
             <div class="row" style="justify-content:space-between">
               <div class="price">${escapeHtml(it.price)}</div>
-              <div class="status ${statusClass}">● ${escapeHtml(it.status)}</div>
-            </div>
-
-            <div class="row">
-              ${(it.highlights||[]).slice(0,6).map(badge).join("")}
-            </div>
-
-            <div class="row">
-              <button class="btn" onclick="copyText(${JSON.stringify(msg)})">คัดลอกข้อความทัก</button>
-              <a class="btn" href="${lineLink}" target="_blank" rel="noreferrer">ทัก Line</a>
-            </div>
-
-            <details>
-              <summary>ดูรายละเอียดเต็ม</summary>
-              <div class="detail-wrap">
-                <pre class="detail-pre">${escapeHtml(it.detail)}</pre>
+              <div class="status ${cls}">
+                <span class="dot"></span>
+                <span>${escapeHtml(it.status)}</span>
               </div>
-            </details>
+            </div>
+
+            <div class="row">${tags}</div>
+
+            <div class="card-actions">
+              <button class="btn small primary" data-act="copy" data-msg="${escapeHtml(msg)}">📋 คัดลอกข้อความทัก</button>
+              <a class="btn small" href="${lineLink()}" target="_blank" rel="noreferrer" data-act="line">💬 ทัก Line</a>
+              <button class="btn small ghost" data-act="open">⚡ รายละเอียด</button>
+            </div>
           </div>
-        </article>`;
-      }).join("") || `<div class="panel">ไม่พบรายการที่ตรงกับคำค้น</div>`;
+        </article>
+      `;
     }
 
-    window.copyText = async (txt) => {
-      try{
-        await navigator.clipboard.writeText(txt);
-        showToast("คัดลอกข้อความแล้ว");
-      }catch(e){
-        prompt("คัดลอกไม่ได้ ให้คัดลอกเอง:", txt);
+    function applySort(list){
+      const arr = [...list];
+      if(sortMode==="low"){
+        arr.sort((a,b)=>(parsePriceToNumber(a.price)||1e18)-(parsePriceToNumber(b.price)||1e18));
+      } else if(sortMode==="high"){
+        arr.sort((a,b)=>(parsePriceToNumber(b.price)||-1)-(parsePriceToNumber(a.price)||-1));
+      } else {
+        // default: put "ว่าง" first, then "จอง", then "ขายแล้ว", then by price desc
+        const rank = s => (s==="ว่าง"?0:(s==="จอง"?1:2));
+        arr.sort((a,b)=>{
+          const ra=rank(a.status), rb=rank(b.status);
+          if(ra!==rb) return ra-rb;
+          return (parsePriceToNumber(b.price)||0)-(parsePriceToNumber(a.price)||0);
+        });
       }
-    };
+      return arr;
+    }
 
+    function render(){
+      const q = (elQ.value || "").trim().toLowerCase();
+      const f = elF.value;
+
+      let filtered = items.filter(it=>{
+        const hay = `${it.title} ${it.sect} ${it.style} ${it.price} ${it.status} ${(it.highlights||[]).join(" ")}`
+          .toLowerCase();
+        const okQ = !q || hay.includes(q);
+        const okF = !f || it.status === f;
+        return okQ && okF;
+      });
+
+      filtered = applySort(filtered);
+
+      // stats
+      const total = items.length;
+      const free = items.filter(x=>x.status==="ว่าง").length;
+      const reserved = items.filter(x=>x.status==="จอง").length;
+      const sold = items.filter(x=>x.status==="ขายแล้ว").length;
+      statsLine.textContent = `📌 ทั้งหมด ${total} ไอดี • ว่าง ${free} • จอง ${reserved} • ขายแล้ว ${sold}`;
+
+      elList.innerHTML = filtered.length
+        ? filtered.map(buildCard).join("")
+        : `<div class="panel">ไม่พบรายการที่ตรงกับคำค้น</div>`;
+
+      // attach hover 3D
+      attachCardMotion();
+
+      // reveal observer
+      observeReveal();
+    }
+
+    // ===============================
+    //  Card motion (3D hover)
+    // ===============================
+    function attachCardMotion(){
+      const cards = elList.querySelectorAll(".card");
+      cards.forEach(card=>{
+        card.addEventListener("pointermove", (e)=>{
+          const r = card.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          const y = e.clientY - r.top;
+          card.style.setProperty("--mx", `${(x/r.width)*100}%`);
+          card.style.setProperty("--my", `${(y/r.height)*100}%`);
+          if(!motionOn) return;
+
+          const rx = ((y / r.height) - 0.5) * -6;
+          const ry = ((x / r.width) - 0.5) * 6;
+          card.style.transform = `translateY(-4px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+
+        card.addEventListener("pointerleave", ()=>{
+          card.style.transform = "";
+        });
+      });
+    }
+
+    // ===============================
+    //  Actions: open modal / copy
+    // ===============================
+    elList.addEventListener("click", (e)=>{
+      const act = e.target.closest("[data-act]");
+      const card = e.target.closest(".card");
+      if(!card) return;
+
+      // prevent default open when clicking buttons
+      if(act){
+        const a = act.dataset.act;
+        if(a==="copy"){
+          e.stopPropagation();
+          copyText(act.dataset.msg || "");
+          return;
+        }
+        if(a==="open"){
+          e.stopPropagation();
+          openModal(card.dataset.id);
+          return;
+        }
+        // "line" is link
+        return;
+      }
+
+      openModal(card.dataset.id);
+    });
+
+    elList.addEventListener("keydown", (e)=>{
+      if(e.key!=="Enter" && e.key!==" ") return;
+      const card = e.target.closest(".card");
+      if(!card) return;
+      e.preventDefault();
+      openModal(card.dataset.id);
+    });
+
+    function openModal(id){
+      const it = items.find(x=>x.id===id);
+      if(!it) return;
+
+      mTitle.textContent = it.title;
+      mSub.textContent = `${it.sect} • ${it.style}`;
+      mImg.src = it.img;
+      mImg.alt = it.title;
+      mPrice.textContent = it.price;
+
+      const cls = statusClass(it.status);
+      mStatus.className = `status ${cls}`;
+      mStatus.innerHTML = `<span class="dot"></span><span>${it.status}</span>`;
+
+      mTags.innerHTML = (it.highlights||[]).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join("");
+      mDetail.textContent = it.detail;
+
+      const msg = `สนใจไอดี ${it.title} (${it.sect}) ราคา ${it.price} | สถานะ: ${it.status}\nติดต่อ: Line ${LINE_ID} / Discord ${DISCORD_LINK}`;
+      mCopy.onclick = ()=> copyText(msg);
+      mLine.href = lineLink();
+
+      mZoom.onclick = ()=>{
+        lightboxImg.src = it.img;
+        lightboxImg.alt = it.title;
+        lightbox.classList.add("show");
+      };
+
+      backdrop.classList.add("show");
+      backdrop.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      backdrop.classList.remove("show");
+      backdrop.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    mClose.addEventListener("click", closeModal);
+    backdrop.addEventListener("click", (e)=>{
+      if(e.target === backdrop) closeModal();
+    });
+    window.addEventListener("keydown", (e)=>{
+      if(e.key==="Escape"){
+        if(lightbox.classList.contains("show")) lightbox.classList.remove("show");
+        else if(backdrop.classList.contains("show")) closeModal();
+      }
+    });
+
+    lightbox.addEventListener("click", ()=> lightbox.classList.remove("show"));
+
+    // ===============================
+    //  Search / filter
+    // ===============================
     elQ.addEventListener("input", render);
     elF.addEventListener("change", render);
+
+    // ===============================
+    //  Scroll progress + to top
+    // ===============================
+    window.addEventListener("scroll", ()=>{
+      const h = document.documentElement;
+      const sc = h.scrollTop || document.body.scrollTop;
+      const max = (h.scrollHeight - h.clientHeight) || 1;
+      const pct = Math.min(100, Math.max(0, (sc/max)*100));
+      progress.style.width = pct + "%";
+
+      if(sc > 500) toTop.classList.add("show");
+      else toTop.classList.remove("show");
+    });
+
+    toTop.addEventListener("click", ()=> window.scrollTo({top:0, behavior: motionOn ? "smooth" : "auto"}));
+
+    // ===============================
+    //  Reveal animations (on scroll)
+    // ===============================
+    let _observer;
+    function observeReveal(){
+      if(_observer) _observer.disconnect();
+      const els = document.querySelectorAll(".reveal");
+      if(!("IntersectionObserver" in window)){
+        els.forEach(el=>el.classList.add("in"));
+        return;
+      }
+      _observer = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{
+          if(en.isIntersecting) en.target.classList.add("in");
+        });
+      }, { threshold: 0.08 });
+      els.forEach(el=>_observer.observe(el));
+    }
+
+    // ===============================
+    //  init
+    // ===============================
     render();
+    observeReveal();
+
   </script>
 </body>
 </html>
