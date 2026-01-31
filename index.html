@@ -5,11 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#070b14" />
   <title>TNG-ID-SHOP</title>
-
-  <!-- ถ้า JS ทำงาน จะใส่คลาส js เพื่อเปิดเอฟเฟกต์ reveal; ถ้า JS พัง หน้าเว็บยังไม่หาย -->
-  <script>document.documentElement.classList.add("js");</script>
-
-  <style>
+  <!-- Logo / Favicon (อัปโหลดไฟล์โลโก้ไว้ที่ assets/logo.png) -->
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <meta property="og:title" content="TNG-ID-SHOP" />
+  <meta property="og:description" content="ร้านขายไอดีเกม • ค้นหา/กรอง/เรียงราคา • ดูรายละเอียดแบบเต็ม" />
+  <meta property="og:image" content="assets/logo.png" />
+<style>
     :root{
 
       --bg0:#050811;
@@ -86,6 +88,7 @@
     .brand-mini{ display:flex; align-items:center; gap:10px; }
     .logo{
       width:38px;height:38px;border-radius:12px;
+      display:grid; place-items:center;
       background:
         radial-gradient(circle at 30% 30%, rgba(255,255,255,.30), transparent 60%),
         linear-gradient(135deg, rgba(99,179,255,.95), rgba(138,91,255,.95));
@@ -98,6 +101,15 @@
       animation: spin 2.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    .logo img{
+      width:100%; height:100%;
+      object-fit:cover;
+      border-radius:12px;
+      position:relative;
+      z-index:1;
+      display:block;
+    }
 
     .brand-mini b{ font-weight:900; letter-spacing:.2px; }
     .brand-mini span{ color: var(--muted); font-size:12px; }
@@ -260,8 +272,8 @@
 
     /* reveal fallback: ถ้า JS พัง ให้เห็นทุกอย่าง */
     .reveal{ opacity:1; transform:none; transition:.35s ease; }
-    .js .reveal{ opacity:0; transform: translateY(10px); }
-    .js .reveal.in{ opacity:1; transform: translateY(0); }
+    .js-ready .reveal{ opacity:0; transform: translateY(10px); }
+    .js-ready .reveal.in{ opacity:1; transform: translateY(0); }
 
     footer{ margin-top:18px; color: var(--muted); font-size:12px; }
   </style>
@@ -274,7 +286,7 @@
   <div class="wrap" id="top">
     <div class="topbar reveal">
       <div class="brand-mini">
-        <div class="logo" aria-hidden="true"></div>
+        <div class="logo" aria-hidden="true"><img src="assets/logo.png" alt="" onerror="this.style.display='none'"></div>
         <div>
           <div><b>TNG-ID-SHOP</b></div>
           <div><span>•ร้านขายไอดีเกม•</span></div>
@@ -284,6 +296,7 @@
         <a class="btn ghost small" href="#list">ดูรายการ</a>
         <button class="btn small" id="copyLine">คัดลอก Line</button>
         <a class="btn small" id="discordBtn" href="#" target="_blank" rel="noreferrer">Discord</a>
+        <a class="btn small" id="facebookBtn" href="#" target="_blank" rel="noreferrer">Facebook</a>
       </div>
     </div>
 
@@ -389,8 +402,9 @@
     // ===============================
     //  ตั้งค่าของคุณ
     // ===============================
-    const LINE_ID = "https://line.me/R/ti/p/@334xzbqa";        // เช่น "tree.support"
-    const DISCORD_LINK = "https://discord.gg/Dz3Gy6pk"; // ใส่ลิงก์โปรไฟล์/เซิร์ฟเวอร์
+    const LINE_CONTACT = "https://line.me/R/ti/p/@334xzbqa"; // ใส่ได้ทั้ง "ไอดีไลน์" หรือ "ลิงก์ Line" (https://...)
+    const DISCORD_LINK = "https://discord.gg/Dz3Gy6pk";      // ลิงก์ Discord
+    const FACEBOOK_LINK = "https://www.facebook.com/panyawat.patchratreisorn/";           // ลิงก์ Facebook (เพจ/โปรไฟล์)
 
     // ===============================
     //  รายละเอียดเต็ม (แก้: ปิด backtick ให้ครบ)
@@ -778,6 +792,11 @@
     const lightboxImg = document.getElementById("lightboxImg");
 
     document.getElementById("discordBtn").href = DISCORD_LINK;
+    const fbBtn = document.getElementById("facebookBtn");
+    if(fbBtn){
+      fbBtn.href = FACEBOOK_LINK || "#";
+      if(!FACEBOOK_LINK || FACEBOOK_LINK === "#") fbBtn.style.display = "none";
+    }
 
     // ===============================
     //  Helpers
@@ -819,7 +838,14 @@
     }
 
     function lineLink(){
-      return `https://line.me/ti/p/~${encodeURIComponent(LINE_ID)}`;
+      const v = String(LINE_CONTACT || "").trim();
+      if(!v) return "#";
+      // ถ้าใส่มาเป็นลิงก์อยู่แล้ว ให้ใช้ตรงๆ
+      if(/^https?:\/\//i.test(v)) return v;
+      // ถ้าใส่มาเป็น @xxxx ให้ตัด @ ออก
+      const id = v.startsWith("@") ? v.slice(1) : v;
+      return `https://line.me/ti/p/~${encodeURIComponent(id)}`;
+    }`;
     }
 
     // ===============================
@@ -847,9 +873,9 @@
     // ===============================
     //  Hero actions
     // ===============================
-    document.getElementById("copyLine").addEventListener("click", ()=> copyText(LINE_ID));
+    document.getElementById("copyLine").addEventListener("click", ()=> copyText(lineLink() === "#" ? LINE_CONTACT : lineLink()));
     document.getElementById("copyMsgTop").addEventListener("click", ()=>{
-      const msg = `สนใจไอดีในร้าน TNG-ID-SHOP\nติดต่อ: Line ${LINE_ID} / Discord ${DISCORD_LINK}`;
+      const msg = `สนใจไอดีในร้าน TNG-ID-SHOP\nติดต่อ: Line ${lineLink() === "#" ? LINE_CONTACT : lineLink()} / Discord ${DISCORD_LINK}` + (FACEBOOK_LINK ? ` / Facebook ${FACEBOOK_LINK}` : "");
       copyText(msg);
     });
 
@@ -871,7 +897,7 @@
     // ===============================
     function buildCard(it){
       const cls = statusClass(it.status);
-      const msg = `สนใจไอดี ${it.title} (${it.sect}) ราคา ${it.price} | สถานะ: ${it.status}\nติดต่อ: Line ${LINE_ID} / Discord ${DISCORD_LINK}`;
+      const msg = `สนใจไอดี ${it.title} (${it.sect}) ราคา ${it.price} | สถานะ: ${it.status}\nติดต่อ: Line ${lineLink() === "#" ? LINE_CONTACT : lineLink()} / Discord ${DISCORD_LINK}` + (FACEBOOK_LINK ? ` / Facebook ${FACEBOOK_LINK}` : "");
       const tags = (it.highlights||[]).slice(0,6).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join("");
 
       return `
@@ -983,7 +1009,7 @@
       mTags.innerHTML = (it.highlights||[]).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join("");
       mDetail.textContent = it.detail;
 
-      const msg = `สนใจไอดี ${it.title} (${it.sect}) ราคา ${it.price} | สถานะ: ${it.status}\nติดต่อ: Line ${LINE_ID} / Discord ${DISCORD_LINK}`;
+      const msg = `สนใจไอดี ${it.title} (${it.sect}) ราคา ${it.price} | สถานะ: ${it.status}\nติดต่อ: Line ${lineLink() === "#" ? LINE_CONTACT : lineLink()} / Discord ${DISCORD_LINK}` + (FACEBOOK_LINK ? ` / Facebook ${FACEBOOK_LINK}` : "");
       mCopy.onclick = ()=> copyText(msg);
       mLine.href = lineLink();
 
@@ -1054,6 +1080,17 @@
     }
 
     // ===============================
+    //  Reveal helper (กันหน้าดำเวลา JS พัง)
+    // ===============================
+    function markVisibleReveals(){
+      const els = document.querySelectorAll('.reveal');
+      els.forEach(el=>{
+        const r = el.getBoundingClientRect();
+        if(r.top < window.innerHeight * 0.95) el.classList.add('in');
+      });
+    }
+
+// ===============================
     //  init (มี try/catch ให้ไม่ดำมืดอีก)
     // ===============================
     function render(){
@@ -1087,7 +1124,13 @@
     try{
       render();
       observeReveal();
+      markVisibleReveals();
+      // เปิดโหมด reveal หลังจากมีเนื้อหาแล้ว (กันหน้าดำถ้า JS ล่ม)
+      document.documentElement.classList.add('js-ready');
     }catch(err){
+      document.documentElement.classList.remove('js-ready');
+      document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+
       console.error(err);
       elList.innerHTML = `
         <div class="panel">
