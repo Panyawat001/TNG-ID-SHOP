@@ -6,8 +6,12 @@
   <meta name="theme-color" content="#070b14" />
   <title>TNG-ID-SHOP</title>
 
+  <!-- ถ้า JS ทำงาน จะใส่คลาส js เพื่อเปิดเอฟเฟกต์ reveal; ถ้า JS พัง หน้าเว็บยังไม่หาย -->
+  <script>document.documentElement.classList.add("js");</script>
+
   <style>
     :root{
+
       --bg0:#050811;
       --bg1:#070b14;
       --bg2:#0b1220;
@@ -49,7 +53,6 @@
       overflow-x:hidden;
     }
 
-    /* ===== Ambient animated grid ===== */
     .bg-grid{
       position:fixed; inset:0;
       pointer-events:none;
@@ -70,7 +73,6 @@
 
     .wrap{ max-width:1180px; margin:0 auto; padding:26px 16px 34px; position:relative; z-index:2; }
 
-    /* ===== Top Bar ===== */
     .topbar{
       display:flex; align-items:center; justify-content:space-between;
       gap:12px; flex-wrap:wrap;
@@ -100,7 +102,6 @@
     .brand-mini b{ font-weight:900; letter-spacing:.2px; }
     .brand-mini span{ color: var(--muted); font-size:12px; }
 
-    /* ===== Hero ===== */
     .hero{
       margin-top:14px;
       border-radius: var(--radius2);
@@ -136,17 +137,9 @@
       gap:14px;
       align-items:stretch;
     }
-    @media (max-width:880px){
-      .hero-grid{ grid-template-columns:1fr; }
-    }
+    @media (max-width:880px){ .hero-grid{ grid-template-columns:1fr; } }
 
-    .hero h1{
-      margin:0;
-      font-size:34px;
-      font-weight:950;
-      letter-spacing:.2px;
-      line-height:1.05;
-    }
+    .hero h1{ margin:0; font-size:34px; font-weight:950; letter-spacing:.2px; line-height:1.05; }
     .glow{
       background: linear-gradient(90deg, #fff, #cfe6ff, #fff);
       -webkit-background-clip:text; background-clip:text;
@@ -154,9 +147,7 @@
       text-shadow: 0 0 18px rgba(99,179,255,.15);
       position:relative;
     }
-    .glitch{
-      position:relative; display:inline-block;
-    }
+    .glitch{ position:relative; display:inline-block; }
     .glitch:before,.glitch:after{
       content:attr(data-text);
       position:absolute; inset:0;
@@ -165,16 +156,8 @@
       clip-path: inset(0 0 0 0);
       pointer-events:none;
     }
-    .glitch:before{
-      transform: translate(1px,-1px);
-      color: rgba(99,179,255,.75);
-      animation: glitch1 3.2s infinite linear;
-    }
-    .glitch:after{
-      transform: translate(-1px,1px);
-      color: rgba(138,91,255,.7);
-      animation: glitch2 2.7s infinite linear;
-    }
+    .glitch:before{ transform: translate(1px,-1px); color: rgba(99,179,255,.75); animation: glitch1 3.2s infinite linear; }
+    .glitch:after{ transform: translate(-1px,1px); color: rgba(138,91,255,.7); animation: glitch2 2.7s infinite linear; }
     @keyframes glitch1{
       0%,100%{ clip-path: inset(0 0 0 0); }
       20%{ clip-path: inset(10% 0 65% 0); }
@@ -189,358 +172,98 @@
       75%{ clip-path: inset(40% 0 35% 0); }
     }
 
-    .hero p{
-      margin:10px 0 0;
-      color: var(--muted);
-      font-size:13px;
-      line-height:1.55;
-      max-width: 58ch;
-    }
+    .hero p{ margin:10px 0 0; color: var(--muted); font-size:13px; line-height:1.55; max-width: 58ch; }
+    .hero-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; align-items:center; }
 
-    .hero-actions{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top:14px;
-      align-items:center;
-    }
+    .panel{ border-radius: var(--radius); border:1px solid rgba(255,255,255,.09); background: rgba(10,14,26,.58); backdrop-filter: blur(12px); padding:14px; box-shadow: 0 12px 30px rgba(0,0,0,.22); }
+    .controls{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .input{ flex:1; min-width:220px; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); color: var(--text); border-radius: 14px; padding:11px 12px; outline:none; transition: .2s ease; }
+    .input:focus{ border-color: rgba(99,179,255,.55); box-shadow: 0 0 0 4px rgba(99,179,255,.12); }
 
-    /* ===== Controls Panel ===== */
-    .panel{
-      border-radius: var(--radius);
-      border:1px solid rgba(255,255,255,.09);
-      background: rgba(10,14,26,.58);
-      backdrop-filter: blur(12px);
-      padding:14px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.22);
-    }
-    .controls{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-    }
-    .input{
-      flex:1; min-width:220px;
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.12);
-      color: var(--text);
-      border-radius: 14px;
-      padding:11px 12px;
-      outline:none;
-      transition: .2s ease;
-    }
-    .input:focus{
-      border-color: rgba(99,179,255,.55);
-      box-shadow: 0 0 0 4px rgba(99,179,255,.12);
-    }
-
-    /* ===== Buttons ===== */
     .btn{
-      cursor:pointer;
-      border-radius: 14px;
-      padding:11px 12px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      text-decoration:none;
-      display:inline-flex; gap:8px; align-items:center;
-      white-space:nowrap;
-      transition: transform .12s ease, border-color .2s ease, box-shadow .2s ease;
-      user-select:none;
+      cursor:pointer; border-radius: 14px; padding:11px 12px;
+      border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04);
+      color:var(--text); text-decoration:none; display:inline-flex; gap:8px; align-items:center;
+      white-space:nowrap; transition: transform .12s ease, border-color .2s ease, box-shadow .2s ease; user-select:none;
     }
-    .btn:hover{
-      border-color: rgba(99,179,255,.55);
-      box-shadow: 0 12px 30px rgba(0,0,0,.20);
-      transform: translateY(-1px);
-    }
+    .btn:hover{ border-color: rgba(99,179,255,.55); box-shadow: 0 12px 30px rgba(0,0,0,.20); transform: translateY(-1px); }
     .btn:active{ transform: translateY(0px) scale(.99); }
-    .btn.primary{
-      border-color: rgba(99,179,255,.35);
-      background: linear-gradient(135deg, rgba(99,179,255,.22), rgba(138,91,255,.18));
-      box-shadow: 0 16px 40px rgba(99,179,255,.09);
-    }
-    .btn.ghost{
-      background: transparent;
-      border-color: rgba(255,255,255,.10);
-    }
+    .btn.primary{ border-color: rgba(99,179,255,.35); background: linear-gradient(135deg, rgba(99,179,255,.22), rgba(138,91,255,.18)); box-shadow: 0 16px 40px rgba(99,179,255,.09); }
+    .btn.ghost{ background: transparent; border-color: rgba(255,255,255,.10); }
     .btn.small{ padding:9px 11px; border-radius: 13px; font-size:13px; }
 
-    /* ===== Sorting pills ===== */
     .pills{ display:flex; gap:8px; flex-wrap:wrap; }
-    .pill{
-      padding:9px 11px;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:999px;
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      cursor:pointer;
-      user-select:none;
-      transition:.18s ease;
-      font-size:13px;
-    }
+    .pill{ padding:9px 11px; border:1px solid rgba(255,255,255,.10); border-radius:999px; background: rgba(255,255,255,.03); color: var(--muted); cursor:pointer; user-select:none; transition:.18s ease; font-size:13px; }
     .pill:hover{ border-color: rgba(99,179,255,.35); color:#dff0ff; }
-    .pill.active{
-      border-color: rgba(99,179,255,.55);
-      background: rgba(99,179,255,.10);
-      color:#eaf4ff;
-    }
+    .pill.active{ border-color: rgba(99,179,255,.55); background: rgba(99,179,255,.10); color:#eaf4ff; }
 
-    /* ===== Cards grid ===== */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
-      margin-top:14px;
-    }
+    .grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; margin-top:14px; }
     @media (max-width:980px){ .grid{ grid-template-columns:repeat(2,1fr); } }
     @media (max-width:620px){ .grid{ grid-template-columns:1fr; } }
 
-    .card{
-      border-radius: var(--radius2);
-      border:1px solid rgba(255,255,255,.10);
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      overflow:hidden;
-      box-shadow: 0 18px 50px rgba(0,0,0,.35);
-      transform-style: preserve-3d;
-      position:relative;
-      transition: transform .18s ease, border-color .2s ease, box-shadow .2s ease;
-    }
-    .card:before{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(600px 280px at var(--mx,50%) var(--my,30%), rgba(99,179,255,.22), transparent 55%);
-      opacity:.0;
-      transition: opacity .2s ease;
-      pointer-events:none;
-    }
-    .card:hover{
-      border-color: rgba(99,179,255,.28);
-      box-shadow: 0 22px 70px rgba(0,0,0,.48);
-      transform: translateY(-4px);
-    }
+    .card{ border-radius: var(--radius2); border:1px solid rgba(255,255,255,.10); background: var(--card); backdrop-filter: blur(12px); overflow:hidden; box-shadow: 0 18px 50px rgba(0,0,0,.35); transform-style: preserve-3d; position:relative; transition: transform .18s ease, border-color .2s ease, box-shadow .2s ease; }
+    .card:before{ content:""; position:absolute; inset:0; background: radial-gradient(600px 280px at var(--mx,50%) var(--my,30%), rgba(99,179,255,.22), transparent 55%); opacity:.0; transition: opacity .2s ease; pointer-events:none; }
+    .card:hover{ border-color: rgba(99,179,255,.28); box-shadow: 0 22px 70px rgba(0,0,0,.48); transform: translateY(-4px); }
     .card:hover:before{ opacity:1; }
 
-    .thumb{
-      display:block;
-      width:100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      background: rgba(0,0,0,.22);
-      filter: saturate(1.08) contrast(1.06);
-      transform: translateZ(20px);
-    }
-
+    .thumb{ display:block; width:100%; aspect-ratio: 16 / 9; object-fit: cover; background: rgba(0,0,0,.22); filter: saturate(1.08) contrast(1.06); transform: translateZ(20px); }
     .pad{ padding:12px 12px 14px; }
     .title{ margin:0; font-weight:950; font-size:16px; letter-spacing:.15px; }
     .sub{ margin-top:5px; color:var(--muted); font-size:12px; line-height:1.5; }
     .row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
 
-    .price{
-      font-weight:950;
-      font-size:20px;
-      letter-spacing:.2px;
-    }
-    .status{
-      font-weight:950;
-      display:inline-flex; gap:8px; align-items:center;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      font-size:12px;
-      color: var(--muted);
-    }
+    .price{ font-weight:950; font-size:20px; letter-spacing:.2px; }
+    .status{ font-weight:950; display:inline-flex; gap:8px; align-items:center; padding:7px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.03); font-size:12px; color: var(--muted); }
     .dot{ width:8px;height:8px;border-radius:50%; background:#999; box-shadow:0 0 14px rgba(255,255,255,.08); }
     .status.ok .dot{ background: var(--ok); box-shadow:0 0 16px rgba(54,211,153,.25); }
     .status.warn .dot{ background: var(--warn); box-shadow:0 0 16px rgba(251,191,36,.22); }
     .status.sold .dot{ background: var(--sold); box-shadow:0 0 16px rgba(255,107,107,.22); }
 
-    .badge{
-      font-size:12px;
-      padding:5px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      color: #cfe2ff;
-      background: rgba(255,255,255,.03);
-    }
+    .badge{ font-size:12px; padding:5px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.10); color: #cfe2ff; background: rgba(255,255,255,.03); }
+    .mini{ color: var(--muted); font-size:12px; margin-top:10px; }
+    .card-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
 
-    .mini{
-      color: var(--muted);
-      font-size:12px;
-      margin-top:10px;
-    }
-
-    .card-actions{
-      display:flex; gap:8px; flex-wrap:wrap;
-      margin-top:12px;
-    }
-
-    /* ===== Modal ===== */
-    .backdrop{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(10px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      z-index: 50;
-    }
+    .backdrop{ position:fixed; inset:0; background: rgba(0,0,0,.62); backdrop-filter: blur(10px); display:none; align-items:center; justify-content:center; padding:16px; z-index: 50; }
     .backdrop.show{ display:flex; }
-    .modal{
-      width:min(980px, 100%);
-      border-radius: 22px;
-      border:1px solid rgba(255,255,255,.12);
-      background:
-        radial-gradient(900px 460px at 20% 20%, rgba(99,179,255,.18), transparent 60%),
-        radial-gradient(900px 460px at 80% 20%, rgba(138,91,255,.16), transparent 60%),
-        linear-gradient(180deg, rgba(18,27,47,.92), rgba(9,12,20,.78));
-      box-shadow: 0 30px 120px rgba(0,0,0,.60);
-      overflow:hidden;
-      transform: translateY(10px) scale(.98);
-      opacity:0;
-      transition: .18s ease;
-    }
-    .backdrop.show .modal{
-      transform: translateY(0) scale(1);
-      opacity:1;
-    }
-    .modal-top{
-      display:flex; justify-content:space-between; align-items:flex-start;
-      gap:12px;
-      padding:14px 14px 8px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .modal-title{
-      display:flex; flex-direction:column; gap:4px;
-    }
+    .modal{ width:min(980px, 100%); border-radius: 22px; border:1px solid rgba(255,255,255,.12); background: radial-gradient(900px 460px at 20% 20%, rgba(99,179,255,.18), transparent 60%), radial-gradient(900px 460px at 80% 20%, rgba(138,91,255,.16), transparent 60%), linear-gradient(180deg, rgba(18,27,47,.92), rgba(9,12,20,.78)); box-shadow: 0 30px 120px rgba(0,0,0,.60); overflow:hidden; transform: translateY(10px) scale(.98); opacity:0; transition: .18s ease; }
+    .backdrop.show .modal{ transform: translateY(0) scale(1); opacity:1; }
+    .modal-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; padding:14px 14px 8px; border-bottom:1px solid rgba(255,255,255,.08); }
+    .modal-title{ display:flex; flex-direction:column; gap:4px; }
     .modal-title b{ font-size:18px; font-weight:950; }
     .modal-title span{ color:var(--muted); font-size:12px; }
-    .x{
-      width:40px;height:40px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      cursor:pointer;
-      display:grid; place-items:center;
-      transition:.12s ease;
-    }
+    .x{ width:40px;height:40px;border-radius:14px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.04); color:var(--text); cursor:pointer; display:grid; place-items:center; transition:.12s ease; }
     .x:hover{ border-color: rgba(99,179,255,.45); transform: translateY(-1px); }
-    .modal-body{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      padding:14px;
-    }
-    @media (max-width:860px){
-      .modal-body{ grid-template-columns:1fr; }
-    }
-    .modal-img{
-      border-radius: 18px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
-      position:relative;
-    }
+    .modal-body{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; padding:14px; }
+    @media (max-width:860px){ .modal-body{ grid-template-columns:1fr; } }
+    .modal-img{ border-radius: 18px; overflow:hidden; border:1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.20); position:relative; }
     .modal-img img{ width:100%; display:block; object-fit:cover; aspect-ratio: 16/10; }
-    .modal-img .zoom{
-      position:absolute; right:10px; bottom:10px;
-      padding:9px 10px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.40);
-      backdrop-filter: blur(10px);
-      cursor:pointer;
-    }
-    .modal-info{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      padding:12px;
-    }
+    .modal-img .zoom{ position:absolute; right:10px; bottom:10px; padding:9px 10px; border-radius: 14px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.40); backdrop-filter: blur(10px); cursor:pointer; }
+    .modal-info{ border-radius: 18px; border:1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); padding:12px; }
     .modal-info .topline{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
     .modal-info .price{ font-size:22px; }
     .modal-info .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-    .pre{
-      margin-top:10px;
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      padding:12px;
-      color:#dbe8ff;
-      font-family: var(--mono);
-      font-size:12px;
-      white-space:pre-wrap;
-      line-height:1.6;
-      max-height: 360px;
-      overflow:auto;
-    }
+    .pre{ margin-top:10px; border-radius: 16px; border:1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.18); padding:12px; color:#dbe8ff; font-family: var(--mono); font-size:12px; white-space:pre-wrap; line-height:1.6; max-height: 360px; overflow:auto; }
     .pre::-webkit-scrollbar{ height:10px; width:10px }
     .pre::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.14); border-radius: 999px }
     .pre::-webkit-scrollbar-track{ background: rgba(0,0,0,.18); border-radius: 999px }
 
-    /* ===== Lightbox ===== */
-    .lightbox{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.82);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      z-index:60;
-    }
+    .lightbox{ position:fixed; inset:0; background: rgba(0,0,0,.82); display:none; align-items:center; justify-content:center; padding:16px; z-index:60; }
     .lightbox.show{ display:flex; }
-    .lightbox img{
-      width:min(1200px, 100%);
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: 0 30px 120px rgba(0,0,0,.7);
-    }
+    .lightbox img{ width:min(1200px, 100%); border-radius: 18px; border:1px solid rgba(255,255,255,.14); box-shadow: 0 30px 120px rgba(0,0,0,.7); }
 
-    /* ===== Toast ===== */
-    .toast{
-      position:fixed; left:50%; bottom:22px;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,.60);
-      border: 1px solid rgba(255,255,255,.18);
-      padding:10px 12px;
-      border-radius: 14px;
-      color:#fff;
-      display:none;
-      z-index:70;
-      backdrop-filter: blur(10px);
-    }
+    .toast{ position:fixed; left:50%; bottom:22px; transform: translateX(-50%); background: rgba(0,0,0,.60); border: 1px solid rgba(255,255,255,.18); padding:10px 12px; border-radius: 14px; color:#fff; display:none; z-index:70; backdrop-filter: blur(10px); }
 
-    /* ===== Scroll progress + Back to top ===== */
-    .progress{
-      position:fixed; left:0; top:0; height:3px;
-      width:0%;
-      background: linear-gradient(90deg, rgba(99,179,255,.95), rgba(138,91,255,.95), rgba(39,242,213,.95));
-      box-shadow: 0 0 18px rgba(99,179,255,.22);
-      z-index:80;
-    }
-    .toTop{
-      position:fixed; right:16px; bottom:16px;
-      width:46px; height:46px; border-radius: 16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(12,16,28,.62);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-      display:grid; place-items:center;
-      cursor:pointer;
-      opacity:0; transform: translateY(10px);
-      transition:.18s ease;
-      z-index:75;
-    }
+    .progress{ position:fixed; left:0; top:0; height:3px; width:0%; background: linear-gradient(90deg, rgba(99,179,255,.95), rgba(138,91,255,.95), rgba(39,242,213,.95)); box-shadow: 0 0 18px rgba(99,179,255,.22); z-index:80; }
+    .toTop{ position:fixed; right:16px; bottom:16px; width:46px; height:46px; border-radius: 16px; border:1px solid rgba(255,255,255,.12); background: rgba(12,16,28,.62); backdrop-filter: blur(12px); box-shadow: 0 20px 60px rgba(0,0,0,.45); display:grid; place-items:center; cursor:pointer; opacity:0; transform: translateY(10px); transition:.18s ease; z-index:75; }
     .toTop.show{ opacity:1; transform: translateY(0); }
     .toTop:hover{ border-color: rgba(99,179,255,.55); transform: translateY(-1px); }
 
-    /* ===== Reveal animation ===== */
-    .reveal{ opacity:0; transform: translateY(10px); transition: .35s ease; }
-    .reveal.in{ opacity:1; transform: translateY(0); }
+    /* reveal fallback: ถ้า JS พัง ให้เห็นทุกอย่าง */
+    .reveal{ opacity:1; transform:none; transition:.35s ease; }
+    .js .reveal{ opacity:0; transform: translateY(10px); }
+    .js .reveal.in{ opacity:1; transform: translateY(0); }
 
-    footer{
-      margin-top:18px;
-      color: var(--muted);
-      font-size:12px;
-    }
+    footer{ margin-top:18px; color: var(--muted); font-size:12px; }
   </style>
 </head>
 
@@ -670,7 +393,7 @@
     const DISCORD_LINK = "https://discord.gg/Dz3Gy6pk"; // ใส่ลิงก์โปรไฟล์/เซิร์ฟเวอร์
 
     // ===============================
-    //  รายละเอียดเต็ม (ของเดิม)
+    //  รายละเอียดเต็ม (แก้: ปิด backtick ให้ครบ)
     // ===============================
     const DETAIL_A = `SELL ID  
 
@@ -778,8 +501,7 @@
 หักล้างภายนอก  อัพตัน
 เพิกเฉยป้องกันนอก   อัพตัน
 ป้องกันนอก   อัพตัน
-ป้องกันแข็งกร้าว  อัพตัน;
-
+ป้องกันแข็งกร้าว  อัพตัน;`;
     const DETAIL_B = `SELL ID  
 
 (สำนักบู้ตึงลงเขาทวนอสูร)
@@ -892,8 +614,7 @@
 ป้องกันแข็งกร้าว
 ป้องกันหยาง
 ป้องกันนอก
-(3ชิ้น ยังอัพ ป้องกันหยางยังไม่ตัน กำลังอัพ);
-
+(3ชิ้น ยังอัพ ป้องกันหยางยังไม่ตัน กำลังอัพ);`;
     const DETAIL_C = `SELL ID  
 
 15K
@@ -988,7 +709,7 @@
 ป้องกันแข็งกร้าว
 หักล้างทำลายนอก
 
-เหลือ3ชิ้น กำลังอัพให้ตัน ออฟเดียว;
+เหลือ3ชิ้น กำลังอัพให้ตัน ออฟเดียว;`;
 
     // ===============================
     //  รายการสินค้า
@@ -1087,7 +808,6 @@
     }
 
     function parsePriceToNumber(priceStr){
-      // "฿160,000" -> 160000 , "฿50,000" -> 50000 , else NaN
       const n = Number(String(priceStr).replace(/[^\d.]/g,""));
       return Number.isFinite(n) ? n : NaN;
     }
@@ -1106,20 +826,17 @@
     //  Motion toggle
     // ===============================
     let motionOn = true;
-    const toggleMotionBtn = document.getElementById("toggleMotion");
-    toggleMotionBtn.addEventListener("click", ()=>{
+    document.getElementById("toggleMotion").addEventListener("click", ()=>{
       motionOn = !motionOn;
       document.body.classList.toggle("no-motion", !motionOn);
       showToast(motionOn ? "เปิดเอฟเฟกต์ ✨" : "ปิดเอฟเฟกต์ 💤");
     });
 
-    // If user prefers reduced motion
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
       motionOn = false;
       document.body.classList.add("no-motion");
     }
 
-    // Disable heavy animations if motion off
     const styleMotion = document.createElement("style");
     styleMotion.textContent = `
       .no-motion * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
@@ -1155,7 +872,6 @@
     function buildCard(it){
       const cls = statusClass(it.status);
       const msg = `สนใจไอดี ${it.title} (${it.sect}) ราคา ${it.price} | สถานะ: ${it.status}\nติดต่อ: Line ${LINE_ID} / Discord ${DISCORD_LINK}`;
-
       const tags = (it.highlights||[]).slice(0,6).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join("");
 
       return `
@@ -1192,7 +908,6 @@
       } else if(sortMode==="high"){
         arr.sort((a,b)=>(parsePriceToNumber(b.price)||-1)-(parsePriceToNumber(a.price)||-1));
       } else {
-        // default: put "ว่าง" first, then "จอง", then "ขายแล้ว", then by price desc
         const rank = s => (s==="ว่าง"?0:(s==="จอง"?1:2));
         arr.sort((a,b)=>{
           const ra=rank(a.status), rb=rank(b.status);
@@ -1203,41 +918,6 @@
       return arr;
     }
 
-    function render(){
-      const q = (elQ.value || "").trim().toLowerCase();
-      const f = elF.value;
-
-      let filtered = items.filter(it=>{
-        const hay = `${it.title} ${it.sect} ${it.style} ${it.price} ${it.status} ${(it.highlights||[]).join(" ")}`
-          .toLowerCase();
-        const okQ = !q || hay.includes(q);
-        const okF = !f || it.status === f;
-        return okQ && okF;
-      });
-
-      filtered = applySort(filtered);
-
-      // stats
-      const total = items.length;
-      const free = items.filter(x=>x.status==="ว่าง").length;
-      const reserved = items.filter(x=>x.status==="จอง").length;
-      const sold = items.filter(x=>x.status==="ขายแล้ว").length;
-      statsLine.textContent = `📌 ทั้งหมด ${total} ไอดี • ว่าง ${free} • จอง ${reserved} • ขายแล้ว ${sold}`;
-
-      elList.innerHTML = filtered.length
-        ? filtered.map(buildCard).join("")
-        : `<div class="panel">ไม่พบรายการที่ตรงกับคำค้น</div>`;
-
-      // attach hover 3D
-      attachCardMotion();
-
-      // reveal observer
-      observeReveal();
-    }
-
-    // ===============================
-    //  Card motion (3D hover)
-    // ===============================
     function attachCardMotion(){
       const cards = elList.querySelectorAll(".card");
       cards.forEach(card=>{
@@ -1268,20 +948,10 @@
       const card = e.target.closest(".card");
       if(!card) return;
 
-      // prevent default open when clicking buttons
       if(act){
         const a = act.dataset.act;
-        if(a==="copy"){
-          e.stopPropagation();
-          copyText(act.dataset.msg || "");
-          return;
-        }
-        if(a==="open"){
-          e.stopPropagation();
-          openModal(card.dataset.id);
-          return;
-        }
-        // "line" is link
+        if(a==="copy"){ e.stopPropagation(); copyText(act.dataset.msg || ""); return; }
+        if(a==="open"){ e.stopPropagation(); openModal(card.dataset.id); return; }
         return;
       }
 
@@ -1335,16 +1005,13 @@
     }
 
     mClose.addEventListener("click", closeModal);
-    backdrop.addEventListener("click", (e)=>{
-      if(e.target === backdrop) closeModal();
-    });
+    backdrop.addEventListener("click", (e)=>{ if(e.target === backdrop) closeModal(); });
     window.addEventListener("keydown", (e)=>{
       if(e.key==="Escape"){
         if(lightbox.classList.contains("show")) lightbox.classList.remove("show");
         else if(backdrop.classList.contains("show")) closeModal();
       }
     });
-
     lightbox.addEventListener("click", ()=> lightbox.classList.remove("show"));
 
     // ===============================
@@ -1370,7 +1037,7 @@
     toTop.addEventListener("click", ()=> window.scrollTo({top:0, behavior: motionOn ? "smooth" : "auto"}));
 
     // ===============================
-    //  Reveal animations (on scroll)
+    //  Reveal animations
     // ===============================
     let _observer;
     function observeReveal(){
@@ -1381,19 +1048,55 @@
         return;
       }
       _observer = new IntersectionObserver((entries)=>{
-        entries.forEach(en=>{
-          if(en.isIntersecting) en.target.classList.add("in");
-        });
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add("in"); });
       }, { threshold: 0.08 });
       els.forEach(el=>_observer.observe(el));
     }
 
     // ===============================
-    //  init
+    //  init (มี try/catch ให้ไม่ดำมืดอีก)
     // ===============================
-    render();
-    observeReveal();
+    function render(){
+      const q = (elQ.value || "").trim().toLowerCase();
+      const f = elF.value;
 
+      let filtered = items.filter(it=>{
+        const hay = `${it.title} ${it.sect} ${it.style} ${it.price} ${it.status} ${(it.highlights||[]).join(" ")}`
+          .toLowerCase();
+        const okQ = !q || hay.includes(q);
+        const okF = !f || it.status === f;
+        return okQ && okF;
+      });
+
+      filtered = applySort(filtered);
+
+      const total = items.length;
+      const free = items.filter(x=>x.status==="ว่าง").length;
+      const reserved = items.filter(x=>x.status==="จอง").length;
+      const sold = items.filter(x=>x.status==="ขายแล้ว").length;
+      statsLine.textContent = `📌 ทั้งหมด ${total} ไอดี • ว่าง ${free} • จอง ${reserved} • ขายแล้ว ${sold}`;
+
+      elList.innerHTML = filtered.length
+        ? filtered.map(buildCard).join("")
+        : `<div class="panel">ไม่พบรายการที่ตรงกับคำค้น</div>`;
+
+      attachCardMotion();
+      observeReveal();
+    }
+
+    try{
+      render();
+      observeReveal();
+    }catch(err){
+      console.error(err);
+      elList.innerHTML = `
+        <div class="panel">
+          <b>เกิดข้อผิดพลาดในสคริปต์</b><br>
+          เปิด DevTools (F12) → Console เพื่อดู error<br><br>
+          <span style="color:var(--muted); font-family:var(--mono)">${escapeHtml(err && err.message ? err.message : String(err))}</span>
+        </div>
+      `;
+    }
   </script>
 </body>
 </html>
