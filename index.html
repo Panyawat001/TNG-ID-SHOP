@@ -14,7 +14,6 @@
 
   <style>
     :root{
-
       --bg0:#050811;
       --bg1:#070b14;
       --bg2:#0b1220;
@@ -112,7 +111,7 @@
       background:
         radial-gradient(900px 420px at 20% 20%, rgba(99,179,255,.20), transparent 55%),
         radial-gradient(800px 380px at 80% 20%, rgba(138,91,255,.18), transparent 60%),
-        radial-gradient(900px 480px at 50% 90%, rgba(39,242,213,.10), transparent 60%),
+        radial-gradient(900px 480px at 50% 85%, rgba(39,242,213,.10), transparent 60%),
         linear-gradient(180deg, rgba(18,27,47,.86), rgba(9,12,20,.62));
       backdrop-filter: blur(14px);
       box-shadow: var(--shadow);
@@ -267,6 +266,52 @@
     .js .reveal.in{ opacity:1; transform: translateY(0); }
 
     footer{ margin-top:18px; color: var(--muted); font-size:12px; }
+
+    /* ✅ View counter chip (แจ่มๆ) */
+    .counter-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size:13px;
+      user-select:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .counter-chip b{
+      color: var(--text);
+      font-weight:950;
+      letter-spacing:.2px;
+    }
+    .counter-chip:before{
+      content:"";
+      position:absolute; inset:-120% -60%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      transform: translateX(-70%);
+      animation: sweepChip 5.6s ease-in-out infinite;
+      pointer-events:none;
+      opacity:.35;
+    }
+    @keyframes sweepChip{
+      0%{ transform: translateX(-80%); opacity:0; }
+      18%{ opacity:.45; }
+      40%{ opacity:.20; }
+      100%{ transform: translateX(80%); opacity:0; }
+    }
+    .eye-dot{
+      width:7px; height:7px; border-radius:999px;
+      background: rgba(39,242,213,.95);
+      box-shadow: 0 0 14px rgba(39,242,213,.25);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity:.9; }
+      50%{ transform: scale(1.35); opacity:.55; }
+    }
   </style>
 </head>
 
@@ -283,10 +328,17 @@
           <div><span>•ร้านขายไอดีเกม•</span></div>
         </div>
       </div>
+
       <div class="controls" style="margin-left:auto">
         <a class="btn ghost small" href="#list">ดูรายการ</a>
         <button class="btn small" id="copyLine">คัดลอก Line</button>
         <a class="btn small" id="discordBtn" href="#" target="_blank" rel="noreferrer">Discord</a>
+
+        <!-- ✅ View Counter -->
+        <div class="counter-chip" id="viewsChip" title="จำนวนผู้เข้าชมทั้งหมด">
+          <span class="eye-dot" aria-hidden="true"></span>
+          👁️ <span>ผู้เข้าชม</span> <b id="viewsCount">—</b>
+        </div>
       </div>
     </div>
 
@@ -308,6 +360,7 @@
           </div>
 
           <div class="mini" id="statsLine"></div>
+          <div class="mini" id="viewsHeroLine">👁️ ผู้เข้าชมทั้งหมด: <b id="viewsCountHero">—</b></div>
         </div>
 
         <div class="panel">
@@ -392,11 +445,48 @@
     // ===============================
     //  ตั้งค่าของคุณ
     // ===============================
-    const LINE_ID = "https://line.me/R/ti/p/@334xzbqa";        // เช่น "tree.support"
-    const DISCORD_LINK = "https://discord.gg/Dz3Gy6pk"; // ใส่ลิงก์โปรไฟล์/เซิร์ฟเวอร์
+    const LINE_ID = "https://line.me/R/ti/p/@334xzbqa";        // ใส่ได้ทั้ง "ลิงก์" หรือ "ไอดี"
+    const DISCORD_LINK = "https://discord.gg/Dz3Gy6pk";        // ใส่ลิงก์โปรไฟล์/เซิร์ฟเวอร์
 
     // ===============================
-    //  รายละเอียดเต็ม (แก้: ปิด backtick ให้ครบ)
+    //  View Counter (CountAPI) ✅
+    //  - เพิ่ม 1 ครั้งต่อ session (กันรีเฟรชรัวๆ)
+    // ===============================
+    const COUNT_NAMESPACE = "tng-id-shop-2026"; // ✅ เปลี่ยนได้ให้ไม่ชนคนอื่น
+    const COUNT_KEY_TOTAL = "total_visits";
+
+    async function updateViewCounter(){
+      const elTop = document.getElementById("viewsCount");
+      const elHero = document.getElementById("viewsCountHero");
+      const setText = (v)=>{
+        const t = (typeof v === "number") ? v.toLocaleString("th-TH") : "—";
+        if(elTop) elTop.textContent = t;
+        if(elHero) elHero.textContent = t;
+      };
+
+      const countedKey = "tng_counted_session_v1";
+      const alreadyCounted = sessionStorage.getItem(countedKey) === "1";
+
+      try{
+        const url = alreadyCounted
+          ? `https://api.countapi.xyz/get/${encodeURIComponent(COUNT_NAMESPACE)}/${encodeURIComponent(COUNT_KEY_TOTAL)}`
+          : `https://api.countapi.xyz/hit/${encodeURIComponent(COUNT_NAMESPACE)}/${encodeURIComponent(COUNT_KEY_TOTAL)}`;
+
+        const res = await fetch(url, { cache: "no-store" });
+        const data = await res.json();
+
+        if(!alreadyCounted) sessionStorage.setItem(countedKey, "1");
+
+        const v = (data && typeof data.value === "number") ? data.value : null;
+        setText(v);
+      }catch(err){
+        console.error("ViewCounter error:", err);
+        setText(null);
+      }
+    }
+
+    // ===============================
+    //  รายละเอียดเต็ม
     // ===============================
     const DETAIL_A = `SELL ID  
 
@@ -505,6 +595,7 @@
 เพิกเฉยป้องกันนอก   อัพตัน
 ป้องกันนอก   อัพตัน
 ป้องกันแข็งกร้าว  อัพตัน;`;
+
     const DETAIL_B = `SELL ID  
 
 (สำนักบู้ตึงลงเขาทวนอสูร)
@@ -618,6 +709,7 @@
 ป้องกันหยาง
 ป้องกันนอก
 (3ชิ้น ยังอัพ ป้องกันหยางยังไม่ตัน กำลังอัพ);`;
+
     const DETAIL_C = `SELL ID  
 
 15K
@@ -821,8 +913,12 @@
       return "sold";
     }
 
+    // ✅ ปรับให้รองรับทั้ง Line "ลิงก์" และ "ไอดี"
     function lineLink(){
-      return `https://line.me/ti/p/~${encodeURIComponent(LINE_ID)}`;
+      const s = String(LINE_ID || "").trim();
+      if(!s) return "#";
+      if(/^https?:\/\//i.test(s)) return s; // เป็นลิงก์อยู่แล้ว
+      return `https://line.me/ti/p/~${encodeURIComponent(s)}`; // เป็นไอดี
     }
 
     // ===============================
@@ -1057,7 +1153,7 @@
     }
 
     // ===============================
-    //  init (มี try/catch ให้ไม่ดำมืดอีก)
+    //  init
     // ===============================
     function render(){
       const q = (elQ.value || "").trim().toLowerCase();
@@ -1090,6 +1186,7 @@
     try{
       render();
       observeReveal();
+      updateViewCounter(); // ✅ นับ/ดึงยอดผู้เข้าชม
     }catch(err){
       console.error(err);
       elList.innerHTML = `
